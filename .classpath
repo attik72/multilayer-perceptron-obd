@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry exported="true" kind="lib" path="encog-engine-2.5.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="JOCL-0.1.3a-beta.jar"/>
+	<classpathentry kind="lib" path="neuroph-2.5b.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>
