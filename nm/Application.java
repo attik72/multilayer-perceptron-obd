@@ -10,7 +10,7 @@ public class Application {
 		log("starting...");
 
 		ThreeLayerPerceptron perceptron = new ThreeLayerPerceptron();
-		perceptron.learn("setosa", 30);
+		perceptron.learn("virginica", 30);
 	    log("learning finished");
 		perceptron.save("izuceno.nnet");
 		
