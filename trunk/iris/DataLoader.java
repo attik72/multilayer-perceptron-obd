@@ -7,26 +7,46 @@ import org.neuroph.core.learning.TrainingElement;
 import org.neuroph.core.learning.TrainingSet;
 import org.neuroph.util.TrainingSetImport;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class DataLoader {
 
 	static String loadpath;
 	private TrainingSet trainingSet = new TrainingSet();
 	private TrainingSet learningTS = new TrainingSet();
-	private TrainingSet testTS = new TrainingSet();
+	private TrainingSet setosaTS = new TrainingSet();
+	private TrainingSet versicolorTS = new TrainingSet();
+	private TrainingSet virginicaTS = new TrainingSet();
 
-	public DataLoader(String name, int numLearningEl) {
+	public DataLoader(int numLearningEl) {
 		 try {
-			 loadpath = "iris_" + name + ".data";
-             trainingSet = TrainingSetImport.importFromFile(loadpath, 4, 1, ",");
+			 
+             TrainingSet setosaSet = TrainingSetImport.importFromFile("iris_setosa.data", 4, 1, ",");
+             TrainingSet versicolorSet = TrainingSetImport.importFromFile("iris_versicolor.data", 4, 1, ",");
+             TrainingSet virginicaSet = TrainingSetImport.importFromFile("iris_virginica.data", 4, 1, ",");
+            	 
+             for(int i = 0; i < setosaSet.trainingElements().size(); i++) {
+            	 if(i < numLearningEl)
+            		 this.learningTS.addElement(setosaSet.trainingElements().get(i));
+            	 else
+            		 this.setosaTS.addElement(setosaSet.trainingElements().get(i));
+             }
              
-             for (Iterator<TrainingElement> it = trainingSet.iterator (); it.hasNext(); ) {
-     			if (this.learningTS.getRecordCount() < numLearningEl) {
-     				this.learningTS.addElement(it.next());
-     			} else {
-     				this.testTS.addElement(it.next());
-     			}
+             for(int i = 0; i < versicolorSet.trainingElements().size(); i++) {
+            	 if(i < numLearningEl)
+            		 this.learningTS.addElement(versicolorSet.trainingElements().get(i));
+            	 else
+            		 this.versicolorTS.addElement(versicolorSet.trainingElements().get(i));
+             }
+             
+             for(int i = 0; i < virginicaSet.trainingElements().size(); i++) {
+            	 if(i < numLearningEl)
+            		 this.learningTS.addElement(virginicaSet.trainingElements().get(i));
+            	 else
+            		 this.virginicaTS.addElement(versicolorSet.trainingElements().get(i));
+                       
      		 }
 		 } catch (NumberFormatException e) {
              // TODO Auto-generated catch block
@@ -57,13 +77,31 @@ public class DataLoader {
 		this.learningTS = learningTS;
 	}
 
-	public TrainingSet getTestTS() {
-		return testTS;
+	public TrainingSet getSetosaTS() {
+		return setosaTS;
 	}
 
-	public void setTestTS(TrainingSet testTS) {
-		this.testTS = testTS;
+	public void setSetosaTS(TrainingSet setosaTS) {
+		this.setosaTS = setosaTS;
 	}
+
+	public TrainingSet getVersicolorTS() {
+		return versicolorTS;
+	}
+
+	public void setVersicolorTS(TrainingSet versicolorTS) {
+		this.versicolorTS = versicolorTS;
+	}
+
+	public TrainingSet getVirginicaTS() {
+		return virginicaTS;
+	}
+
+	public void setVirginicaTS(TrainingSet virginicaTS) {
+		this.virginicaTS = virginicaTS;
+	}
+
+	
 	
 	
 }
