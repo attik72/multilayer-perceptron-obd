@@ -22,7 +22,7 @@ import org.neuroph.util.TransferFunctionType;
 public class ThreeLayerPerceptron {
 	
 	// the maximum error allowed
-	private static final double ERROR_THRESHOLD = 0.002;
+	private static final double ERROR_THRESHOLD = 0.05;
 	
 	// when optimizing, we are saving the base so we can easily
 	// rollback when the error gets unsatisfactory
@@ -40,7 +40,7 @@ public class ThreeLayerPerceptron {
 	// NeuralNetworkFactory allows for the most flexibility
 	// default formation 4-10-1
 	public ThreeLayerPerceptron() {
-		this.base = NeuralNetworkFactory.createMLPerceptron("4 4 1", TransferFunctionType.SIGMOID, BackPropagation.class, true, true);
+		this.base = NeuralNetworkFactory.createMLPerceptron("4 10 1", TransferFunctionType.SIGMOID, BackPropagation.class, true, true);
 	}
 	
 	// this is the method that does all the work
@@ -79,7 +79,7 @@ public class ThreeLayerPerceptron {
 		
 		DataLoader dataLoader = null;
 		
-		for(int i = 0; i<10000; i++){
+		for(int i = 0; i<100; i++){
 			dataLoader = learn(44);	
 		}
 		
@@ -87,7 +87,7 @@ public class ThreeLayerPerceptron {
 		double setosaError = test(dataLoader.getSetosaTS(), 1);
 		double versicolorError = test(dataLoader.getVersicolorTS(), 0.5);
 		double virginicaError = test(dataLoader.getVirginicaTS(), 0);
-		this.error = 0.333 * (setosaError + versicolorError + virginicaError);
+		this.error = (setosaError + versicolorError + virginicaError)/3;
 		
 		base.save(BASE_STORAGE_PATH);
 		
@@ -100,12 +100,13 @@ public class ThreeLayerPerceptron {
 	public double test(TrainingSet ts, double expected) {
 		double totalError = 0;
 		for(TrainingElement trainingElement : ts.trainingElements()) {
-
 			base.setInput(trainingElement.getInput());
 			base.calculate();
+			base.notifyChange();
 			double[] networkOutput = base.getOutput();
-			totalError += Math.abs(networkOutput[0] - expected);
-			}
+			System.out.println(networkOutput[0] + " : " + expected);
+			totalError += expected -  Math.abs(networkOutput[0]);
+		}
 		return totalError/ts.trainingElements().size();
 	}
 	
