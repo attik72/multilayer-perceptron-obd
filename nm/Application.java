@@ -10,11 +10,11 @@ public class Application {
 		log("starting...");
 
 		ThreeLayerPerceptron perceptron = new ThreeLayerPerceptron();
-		perceptron.learn("virginica", 30);
-	    log("learning finished");
-		perceptron.save("izuceno.nnet");
+		perceptron.runOptimalBrainDamage();
+	    // log("learning finished");
+		// perceptron.save("izuceno.nnet");
 		
-		log("saved... done");
+		log("done");
 		
 		/*
 		// load the saved network 
