@@ -14,7 +14,6 @@ import java.util.List;
 public class DataLoader {
 
 	static String loadpath;
-	private TrainingSet trainingSet = new TrainingSet();
 	private TrainingSet learningTS = new TrainingSet();
 	private TrainingSet setosaTS = new TrainingSet();
 	private TrainingSet versicolorTS = new TrainingSet();
@@ -45,7 +44,7 @@ public class DataLoader {
             	 if(i < numLearningEl)
             		 this.learningTS.addElement(virginicaSet.trainingElements().get(i));
             	 else
-            		 this.virginicaTS.addElement(versicolorSet.trainingElements().get(i));
+            		 this.virginicaTS.addElement(virginicaSet.trainingElements().get(i));
                        
      		 }
 		 } catch (NumberFormatException e) {
@@ -59,14 +58,6 @@ public class DataLoader {
              e.printStackTrace();
 		 }
 		
-	}
-
-	public TrainingSet getTrainingSet() {
-		return trainingSet;
-	}
-
-	public void setTrainingSet(TrainingSet trainingSet) {
-		this.trainingSet = trainingSet;
 	}
 
 	public TrainingSet getLearningTS() {
