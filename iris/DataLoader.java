@@ -22,9 +22,9 @@ public class DataLoader {
 	public DataLoader(int numLearningEl) {
 		 try {
 			 
-             TrainingSet setosaSet = TrainingSetImport.importFromFile("iris_setosa.data", 4, 1, ",");
-             TrainingSet versicolorSet = TrainingSetImport.importFromFile("iris_versicolor.data", 4, 1, ",");
-             TrainingSet virginicaSet = TrainingSetImport.importFromFile("iris_virginica.data", 4, 1, ",");
+             TrainingSet setosaSet = TrainingSetImport.importFromFile("iris_setosa.data", 4, 3, ",");
+             TrainingSet versicolorSet = TrainingSetImport.importFromFile("iris_versicolor.data", 4, 3, ",");
+             TrainingSet virginicaSet = TrainingSetImport.importFromFile("iris_virginica.data", 4, 3, ",");
             	 
              for(int i = 0; i < setosaSet.trainingElements().size(); i++) {
             	 if(i < numLearningEl)
