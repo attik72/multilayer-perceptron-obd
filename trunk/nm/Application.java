@@ -1,5 +1,8 @@
 package nm;
 
+import org.neuroph.core.learning.TrainingElement;
+import org.neuroph.core.learning.TrainingSet;
+
 public class Application {
 	
 	/**
@@ -11,6 +14,10 @@ public class Application {
 
 		ThreeLayerPerceptron perceptron = new ThreeLayerPerceptron();
 		perceptron.runOptimalBrainDamage();
+		
+		TrainingSet ts = new TrainingSet();
+		// ts.addElement(new TrainingElement("1 1 1 1"));
+		// perceptron.test(new TrainingSet(), expected)
 	    // log("learning finished");
 		// perceptron.save("izuceno.nnet");
 		
