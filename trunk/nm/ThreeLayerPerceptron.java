@@ -48,7 +48,7 @@ public class ThreeLayerPerceptron {
 	// NeuralNetworkFactory allows for the most flexibility
 	// default formation 4-10-1
 	public ThreeLayerPerceptron() {
-		this.base = NeuralNetworkFactory.createMLPerceptron("4 10 3", TransferFunctionType.SIGMOID, BackPropagation.class, true, true);
+		this.base = NeuralNetworkFactory.createMLPerceptron("4 10 3", TransferFunctionType.SIGMOID, BackPropagation.class, false, true);
 		((BackPropagation)this.base.getLearningRule()).setMaxIterations(MAX_ITERATIONS);
 	}
 	
