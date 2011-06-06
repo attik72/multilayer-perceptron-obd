@@ -44,6 +44,14 @@ public class ThreeLayerPerceptron {
 	public void setDataLoader(DataLoader dataLoader) {
 		this.dataLoader = dataLoader;
 	}
+	
+	public MultiLayerPerceptron getBase() {
+		return base;
+	}
+
+	public void setBase(MultiLayerPerceptron base) {
+		this.base = base;
+	}
 
 	// NeuralNetworkFactory allows for the most flexibility
 	// default formation 4-10-1
@@ -53,19 +61,10 @@ public class ThreeLayerPerceptron {
 	}
 	
 	// this is the method that does all the work
-	public void runOptimalBrainDamage(){
-		System.out.println("Broj neurona pre optimizacije: " + this.getHiddenNeuronCount());
-		
-		while (isOptimizationNeeded() && rinseAndRepeat()){
-			System.out.println("iterating obd " + getHiddenNeuronCount());
-		}
-		
-/*		for(int i = 0; i < 5; i++){
-			rinseAndRepeat();
-		}*/
+	public void runOptimalBrainDamage(){		
+		while (isOptimizationNeeded() && rinseAndRepeat()){}
 		
 		// rollback
-		System.out.println("rollback");
 		this.base = (MultiLayerPerceptron) MultiLayerPerceptron.load(BASE_STORAGE_PATH);
 		System.out.println("Broj neurona posle optimizacije: " + this.getHiddenNeuronCount());
 	}
@@ -77,18 +76,12 @@ public class ThreeLayerPerceptron {
 	// has the limit been reached?
 	public boolean isErrorAcceptable(){
 		double error = ((BackPropagation)this.base.getLearningRule()).getTotalNetworkError();
-		System.out.println(error);
 		return error < ERROR_THRESHOLD;
 	}
 
 	// single optimal brain damage iteration
 	public boolean rinseAndRepeat(){
-		// do we need to delete file contents prior to writing?
-		// learning
-				
-		System.out.println("rinseAndRepeat");
 		dataLoader = learn(30);	
-		System.out.println("izvrsio learn");
 		if(isErrorAcceptable()) {			
 			Connection conn = getTheLeastImportantConnection();
 			if (conn == null) return false;
@@ -105,12 +98,8 @@ public class ThreeLayerPerceptron {
 			base.setInput(trainingElement.getInput()[0], trainingElement.getInput()[1], trainingElement.getInput()[2], trainingElement.getInput()[3]);
 			base.calculate();
 			base.notifyChange();
-			/*double[] networkOutput = base.getOutput();
-			System.out.println(networkOutput[0] + " : " + expected);
-			totalError += expected -  Math.abs(networkOutput[0]);*/
 		}
 		return ((BackPropagation)base.getLearningRule()).getTotalNetworkError();
-		// return totalError/ts.trainingElements().size();
 	}
 	
 	// connections are links between neurons. This will return
@@ -192,7 +181,6 @@ public class ThreeLayerPerceptron {
 		double lowestImportance = minimumFrom(importances);
 	    while (it.hasNext()) {
 	        Map.Entry pairs = (Map.Entry)it.next();
-	        // System.out.println(pairs.getKey() + " = " + pairs.getValue());
 	        if(pairs.getValue().equals(lowestImportance)) {
 	        	return (Connection)pairs.getKey();
 	        }
@@ -239,54 +227,22 @@ public class ThreeLayerPerceptron {
 	
 	// save the base to the custom file
 	public void save(String filepath) {
-		System.out.println("save " + getHiddenNeuronCount());
 		base.save(filepath);
 	}
 	
 	public static void main(String[] args) {
-		
-		TrainingSet trainingSet = (new DataLoader(40)).getLearningTS();
-		
-		// create multi layer perceptron
-		// MultiLayerPerceptron myMlPerceptron = new MultiLayerPerceptron(TransferFunctionType.SIGMOID, 4, 2, 3);
-		
-		ThreeLayerPerceptron perceptron = new ThreeLayerPerceptron();
-		MultiLayerPerceptron myMlPerceptron = perceptron.base;
-		
-		perceptron.runOptimalBrainDamage();
-		
-		testNeuralNetwork(myMlPerceptron, perceptron.dataLoader.getVersicolorTS());
-		
-		/*System.out.println(((BackPropagation)myMlPerceptron.getLearningRule()).getTotalNetworkError());
-
-		// test perceptron
-		System.out.println("Testing trained neural network");
-		testNeuralNetwork(myMlPerceptron, trainingSet);
-
-		// save trained neural network
-		myMlPerceptron.save("myMlPerceptron.nnet");
-
-		// load saved neural network
-		NeuralNetwork loadedMlPerceptron = NeuralNetwork.load("myMlPerceptron.nnet");
-
-		// test loaded neural network
-		System.out.println("Testing loaded neural network");
-		testNeuralNetwork(loadedMlPerceptron, trainingSet);
-		System.out.println(((BackPropagation)myMlPerceptron.getLearningRule()).getTotalNetworkError());
-*/
 	}
 	
-	public static void testNeuralNetwork(NeuralNetwork nnet, TrainingSet tset) {
+	public void testNeuralNetwork(TrainingSet tset) {
 
 		for(TrainingElement trainingElement : tset.trainingElements()) {
 
-		nnet.setInput(trainingElement.getInput());
-		nnet.calculate();
-		nnet.notifyChange();
-		double[] networkOutput = nnet.getOutput();
-		System.out.print("Input: " + trainingElement.getInput()[0] + trainingElement.getInput()[1] + trainingElement.getInput()[2] + trainingElement.getInput()[3]);
+		base.setInput(trainingElement.getInput());
+		base.calculate();
+		base.notifyChange();
+		double[] networkOutput = base.getOutput();
+		System.out.print("Input: (" + trainingElement.getInput()[0] + ", " + trainingElement.getInput()[1] + ", " + trainingElement.getInput()[2] + ", " + trainingElement.getInput()[3] + ")");
 		System.out.println(" Output: " + getIrisType(networkOutput));
-
 		}
 
 	}
@@ -297,13 +253,13 @@ public class ThreeLayerPerceptron {
 		max =  (networkOutput[2] > max) ? networkOutput[2] : max;
 		
 		if(max == networkOutput[0])
-			return "Setosa" +  networkOutput[0] +  networkOutput[1] +  networkOutput[2];
+			return "Setosa (" + networkOutput[0] + ", " + networkOutput[1] + ", " +  networkOutput[2] + ")";
 		if(max == networkOutput[1])
-			return "Versicolor" + networkOutput[0] +  networkOutput[1] +  networkOutput[2];
+			return "Versicolor (" + networkOutput[0] + ", " +  networkOutput[1] + ", " +  networkOutput[2] + ")";
 		if(max == networkOutput[2])
-			return "Virginica" + networkOutput[0] +  networkOutput[1] +  networkOutput[2];
+			return "Virginica (" + networkOutput[0] + ", " +  networkOutput[1] + ", " +  networkOutput[2] + ")";
 		
-		return "NE ZNAM!!!";
+		return "Unknown";
 		
 	}
 }
