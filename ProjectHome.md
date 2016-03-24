@@ -1,0 +1,1 @@
+Optimal brain damage method will be used to remove unnecessary parts of a multilayer perceptron.
